@@ -7,6 +7,8 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
+
+
 return array(
     'router' => array(
         'routes' => array(
@@ -50,6 +52,30 @@ return array(
                     ),
                 ),
             ),
+            'awesome' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/awesome[/:food]',
+                    'constraints' => array(
+                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ),
+                    'defaults' => array(
+                        'controller' => 'Awesome',
+                        'action' => 'index',
+                    )
+                ),
+            ),
+            'barf' => array(
+                'type' => 'Literal',
+                'options' => array(
+                    'route' => '/barf',
+                    'defaults' => array(
+                        'controller' => 'Awesome',
+                        'action' => 'barf',
+                    )
+                ),
+            ),
         ),
     ),
     'service_manager' => array(
@@ -73,7 +99,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Awesome' => 'Application\Controller\AwesomeController'
         ),
     ),
     'view_manager' => array(

@@ -18,4 +18,10 @@ class IndexController extends AbstractActionController
     {
         return new ViewModel();
     }
+
+    public function awesomeAction()
+    {
+        $food = $this->params()->fromRoute('food', 'yummy bacon');
+        return array('food'=>$food);
+    }
 }
