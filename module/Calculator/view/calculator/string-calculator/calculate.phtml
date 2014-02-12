@@ -1,0 +1,22 @@
+
+<?php if (isset($answer)) {
+    echo "<p>Answer is: ".$answer."</p>";
+} ?>
+
+<form action="/calculator/calculate" method="POST">
+    <label for="firstNumber">First Number:
+        <input id="firstNumber" type="text" name="firstNumber" />
+    </label>
+    <label for="secondNumber">Second Number:
+        <input id="secondNumber" type="text" name="secondNumber" />
+    </label>
+    <select id="operator" name="operator">
+        <option selected="selected" value="">Select operator...</option>
+        <option value="add">Add</option>
+        <option value="subtract">Subtract</option>
+        <option value="multiply">Multiply</option>
+        <option value="divide">Divide</option>
+        <option value="modulo">Modulo</option>
+    </select>
+    <input type="submit" value="Maths it up!" />
+</form>
