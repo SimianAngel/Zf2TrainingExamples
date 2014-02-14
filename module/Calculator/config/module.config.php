@@ -23,5 +23,21 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
         )
-    )
+    ),
+    // Placeholder for console routes
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'consolecalculator' => array(
+                    'options' => array(
+                        'route' => 'console math <firstNumber> <operator> <secondNumber>',
+                        'defaults' => array(
+                            'controller' => 'StringCalculator',
+                            'action' => 'consolecalculate'
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
 );

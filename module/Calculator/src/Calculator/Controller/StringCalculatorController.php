@@ -5,6 +5,11 @@ namespace Calculator\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+use Calculator\Forms\CalculatorForm;
+use Calculator\Model\Calculator;
+
+use Zend\Session\Container;
+
 class StringCalculatorController extends AbstractActionController
 {
 
@@ -17,39 +22,93 @@ class StringCalculatorController extends AbstractActionController
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
-            $firstNumber = is_null($request->getPost()->firstNumber) ? 0 : (float) $request->getPost()->firstNumber;
-            $secondNumber = is_null($request->getPost()->secondNumber) ? 0 : (float) $request->getPost()->secondNumber;
+
+            $calculatorService = $this->getServiceLocator()->get('CalculatorService');
+            $test = var_dump($request->getPost());
+
+            if (isset($_POST['saveAnswer'])) {
+                //$calculatorService->saveAnswer
+                return array('test'=>$test);
+            }
+
+            if (isset($_POST['clearAnswer'])) {
+                return array('test'=>$test);
+            }
+
+            if (isset($_POST['getAnswer'])) {
+                return array('test'=>$test);
+            }
+
+            $firstNumber = (float) $request->getPost()->get("firstNumber", 0);
+            $secondNumber = (float) $request->getPost()->get("secondNumber", 0);
             $operator = $request->getPost()->operator;
             $answer = "ERR";
 
-            switch($operator) {
-                case "add":
-                    $answer = $firstNumber + $secondNumber;
-                    break;
-                case "subtract":
-                    $answer = $firstNumber - $secondNumber;
-                    break;
-                case "multiply":
-                    $answer = $firstNumber * $secondNumber;
-                    break;
-                case "divide":
-                    if ($secondNumber == 0) {
-                        $answer = "Divide by zero oh shi--";
-                    } else {
-                        $answer = $firstNumber / $secondNumber;
-                    }
-                    break;
-                case "modulo":
-                    $answer = $firstNumber % $secondNumber;
-                    break;
-                default:
-                    $answer = "Please select an operator.";
-            }
+            /**
+             * @var \Calculator\Services\CalculatorService $CalculatorService
+             */
+
+            $answer = $calculatorService->math($firstNumber, $secondNumber, $operator);
 
             return array('answer'=>$answer);
 
         } else {
             return new ViewModel();
+        }
+    }
+
+    public function ConsoleCalculateAction() {
+
+        $request = $this->getRequest();
+
+        if(!$request instanceof \Zend\Console\Request){
+            throw new \Exception('This request is only allowed from the console.');
+        }
+
+        $calculatorService = $this->getServiceLocator()->get('CalculatorService');
+        $firstNumber = $request->getParam('firstNumber');
+        $secondNumber = $request->getParam('secondNumber');
+        $operator = $request->getParam('operator');
+
+        $answer = "ERR";
+
+        /**
+         * @var \Calculator\Services\CalculatorService $CalculatorService
+         */
+
+        $answer = $calculatorService->math($firstNumber, $secondNumber, $operator);
+        echo $answer, PHP_EOL;
+    }
+
+
+
+    public function Calculate_WIP_Action()
+    {
+        $form = new CalculatorForm();
+        $calculator = new Calculator();
+        $request = $this->getRequest();
+
+        $form->setInputFilter($calculator->getInputFilter());
+        $form->setData($request->getPost());
+        if ($request->isPost()) {
+            if ($form->isValid()) {
+                $calculator->exchangeArray($form->getData());
+
+                //$firstNumber = (float) $request->getPost()->get("firstNumber", 0);
+                $firstNumber = (float) $calculator->firstNumber;
+                $secondNumber = (float) $calculator->secondNumber;
+                $operator = $calculator->operator;
+                $answer = "ERR";
+
+                $calculatorService = $this->getServiceLocator()->get('CalculatorService');
+                /**
+                 * @var \Calculator\Services\CalculatorService $CalculatorService
+                 */
+                $answer = $calculatorService->math($firstNumber, $secondNumber, $operator);
+                return array('answer'=>$answer);
+            }
+        } else {
+            return array('form'=>$form);
         }
     }
 

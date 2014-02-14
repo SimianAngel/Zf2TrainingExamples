@@ -1,0 +1,45 @@
+{% if answer %}
+   <p>Answer is: {{ answer }}</p>
+{% endif %}
+
+{% if test %}
+    <p>{{ test }}</p>
+{% endif %}
+
+{#
+{% set calculatorForm = form %}
+{% do calculatorForm.prepare() %}
+{{ form().openTag(calculatorForm) | raw }}
+{{ formRow(calculatorForm.get('firstNumber')) }}
+{{ formRow(calculatorForm.get('secondNumber')) }}
+{{ formRow(calculatorForm.get('operator')) }}
+{{ formRow(calculatorForm.get('submit')) }}
+{{ form().closeTag(calculatorForm) | raw }}
+#}
+
+<div>
+    <form action="/calculator/calculate" method="POST">
+        <input type="hidden" name="answer" value="" />
+        <div>
+            <button name="saveAnswer" type="submit">M+</button>
+            <button name="clearAnswer" type="submit">MC</button>
+            <button name="getAnswer" type="submit">MR</button>
+        </div>
+        <label for="firstNumber">First Number:
+            <input id="firstNumber" type="text" name="firstNumber" />
+        </label>
+        <label for="secondNumber">Second Number:
+            <input id="secondNumber" type="text" name="secondNumber" />
+        </label>
+        <select id="operator" name="operator">
+            <option selected="selected" value="">Select operator...</option>
+            <option value="add">Add</option>
+            <option value="subtract">Subtract</option>
+            <option value="multiply">Multiply</option>
+            <option value="divide">Divide</option>
+            <option value="modulo">Modulo</option>
+        </select>
+        <input type="submit" value="Maths it up!" />
+    </form>
+</div>
+
